@@ -400,4 +400,151 @@ july0325:~/workspace $ pry
 [9] pry(main)> 
 ```
 
-- 
+- 문제가 생겼길래
+
+  ```ruby
+  $ git add .
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git status
+  On branch master
+  
+  No commits yet
+  
+  Changes to be committed:
+    (use "git rm --cached <file>..." to unstage)
+  
+          new file:   ruby/ruby-basic.md
+  
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git commit -m "add ruby-basic.md"
+  [master (root-commit) b5a2f6c] add ruby-basic.md
+   1 file changed, 403 insertions(+)
+   create mode 100644 ruby/ruby-basic.md
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git remote add origin https://github.com/aerison/TIL2.git
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git push -u origin master
+  Username for 'https://github.com': aerison
+  Counting objects: 4, done.
+  Delta compression using up to 4 threads.
+  Compressing objects: 100% (2/2), done.
+  Writing objects: 100% (4/4), 2.88 KiB | 2.88 MiB/s, done.
+  Total 4 (delta 0), reused 0 (delta 0)
+  To https://github.com/aerison/TIL2.git
+   * [new branch]      master -> master
+  Branch 'master' set up to track remote branch 'master' from 'origin'.
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git add .
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git commit -m "
+  > "
+  Aborting commit due to empty commit message.
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git commit -m "add fix"
+  [master b4205e5] add fix
+   1 file changed, 1 insertion(+), 1 deletion(-)
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $ git push
+  Username for 'https://github.com': aerison
+  Counting objects: 4, done.
+  Delta compression using up to 4 threads.
+  Compressing objects: 100% (2/2), done.
+  Writing objects: 100% (4/4), 312 bytes | 312.00 KiB/s, done.
+  Total 4 (delta 1), reused 0 (delta 0)
+  remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+  To https://github.com/aerison/TIL2.git
+     b5a2f6c..b4205e5  master -> master
+  
+  student@M14031 MINGW64 ~/TIL (master)
+  $
+  
+  #추가되면,
+  #저장후, .add >commit>push순
+  
+     
+  ```
+
+- factorial
+
+  ```ruby
+  def factorial(n)
+  n==0? 1:n*factorial(n-1)
+  end
+  factorial#매개변수 안적어서error
+  #데이터 넣으면 오류안남
+  
+  
+  [11] pry(main)> def factorial_default(n=10)
+  [11] pry(main)*   n==0?1:n*factorial_default(n-1)
+  [11] pry(main)* end  
+  => :factorial_default
+  [12] pry(main)> factorial_default
+  => 3628800
+  [13] pry(main)> 
+  ```
+
+- sprit
+
+```ruby
+def
+```
+
+- block(반복문)
+
+```ruby
+#do 로 시작하면 end로 닫는다
+[15] pry(main)> 3.times do |asdf|
+[15] pry(main)*   puts asdf #블록 부분
+[15] pry(main)* end  
+0
+1
+2
+=> 3
+3.times {puts asdf}
+#####
+[16] pry(main)> def hihi
+[16] pry(main)*   return "no block" unless block_given?#block을 받았니?
+[16] pry(main)*   yield #<<문장이 들어갈자리
+[16] pry(main)* end  
+=> :hihi
+[17] pry(main)> hihi
+=> "no block"
+[18] pry(main)> hihi{puts "hihi"}
+=> "no block"
+
+```
+
+- String('',"")
+
+```ruby
+july0325:~/workspace $ pry
+[1] pry(main)> a="hihi \n it's me"                                                                                     
+=> "hihi \n it's me"
+[2] pry(main)> b='hihi \n ut's me'
+SyntaxError: unexpected tIDENTIFIER, expecting end-of-input
+b='hihi \n ut's me'
+               ^
+[2] pry(main)> puts a
+hihi 
+ it's me
+=> nil
+[3] pry(main)> puts b
+NameError: undefined local variable or method `b' for main:Object
+from (pry):3:in `__pry__'
+## ""쓰면 반영 , ''쓰면 글자그대로
+[4] pry(main)> name="aeri"
+=> "aeri"
+[5] pry(main)> "#{name}님 안녕하세요 "
+=> "aeri님 안녕하세요 "
+
+
+```
+
