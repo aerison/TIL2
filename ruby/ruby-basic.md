@@ -622,3 +622,265 @@ hometown:jeju
 ```
 
 - https://gist.github.com/nacyot/7624036
+
+
+
+- Synatra
+
+  ```ruby
+  july0325:~/workspace $ mkdir sinatra-test
+  july0325:~/workspace $ cd sinatra-test/
+  july0325:~/workspace/sinatra-test $ touch app.rb
+  july0325:~/workspace/sinatra-test $ gem install sinatra
+  Fetching: rack-2.0.5.gem (100%)
+  Successfully installed rack-2.0.5
+  Fetching: tilt-2.0.8.gem (100%)
+  Successfully installed tilt-2.0.8
+  Fetching: rack-protection-2.0.2.gem (100%)
+  Successfully installed rack-protection-2.0.2
+  Fetching: mustermann-1.0.2.gem (100%)
+  Successfully installed mustermann-1.0.2
+  Fetching: sinatra-2.0.2.gem (100%)
+  Successfully installed sinatra-2.0.2
+  5 gems installed
+  
+  ```
+
+  http://sinatrarb.com/intro.html
+
+```ruby
+#app.rb에다가, 
+#시나트라에 있는것들 넣어주고,
+
+#다시터미널에 들어와,하면 옆에 서버주소 뜸. 클릭하면 서버가열림
+july0325:~/workspace/sinatra-test $ ruby app.rb -o $IP
+[2018-06-07 06:39:37] INFO  WEBrick 1.3.1
+[2018-06-07 06:39:37] INFO  ruby 2.4.0 (2016-12-24) [x86_64-linux]
+== Sinatra (v2.0.2) has taken the stage on 8080 for development with backup from WEBrick
+[2018-06-07 06:39:37] INFO  WEBrick::HTTPServer#start: pid=2324 port=8080
+222.107.238.24 - - [07/Jun/2018:06:40:08 +0000] "GET /favicon.ico HTTP/1.1" 404 485 0.0043
+10.240.1.191 - - [07/Jun/2018:06:40:08 UTC] "GET /favicon.ico HTTP/1.1" 404 485
+https://class0607-july0325.c9users.io/ -> /favicon.ico
+222.107.238.24 - - [07/Jun/2018:06:40:09 +0000] "GET / HTTP/1.1" 200 12 0.0007
+10.240.0.64 - - [07/Jun/2018:06:40:09 UTC] "GET / HTTP/1.1" 200 12
+https://class0607-july0325.c9users.io/ -> /
+#만일 다시 서버시작하려면, app.rb수정후에
+#서버재시작 
+july0325:~/workspace/sinatra-test $ ruby app.rb -o $IP
+#옆에 url뜸
+
+    
+##
+july0325:~/workspace/sinatra-test $ mkdir views && touch views/htmlfile.html
+july0325:~/workspace/sinatra-test $ ruby app.rb -o $IP
+하고 app.rb가서,  
+    get '/htmlfile' do
+    send_file 'views/htmlfile.html'
+end
+    하고 html파일가서, <ㅗ1>하고싶은말</>
+하고, 서버다시키고, 요청하면 나옴!
+    
+```
+
+https://class0607-july0325.c9users.io/htmlfile
+
+모를땐. ruby string to integer같이 검색
+
+```ruby
+#app.rb
+require 'sinatra'
+require "sinatra/reloader"
+
+get '/' do
+  'Hello world! welcome'
+end
+
+get '/htmlfile' do
+    send_file 'views/htmlfile.html'
+end
+
+get '/htmltag' do
+    '<h1>html태그를 보낼 수 있습니당</h1>
+    <ul>
+    <li>1</li>
+    <li>11</li>
+    </ul>
+    '
+end
+
+get '/welcome/:name' do
+    "#{params[:name]}님안녕하세요"
+end
+
+get '/cube/:num' do
+    input=params[:num].to_i
+    result=input ** 3
+    
+    "<h1>#{result}</h1>"
+end
+
+get '/erbfile' do
+    @name ="me"
+    erb :erbfile
+end
+
+```
+
+```ruby
+#erb.rb
+<h1><%= @name %></h1>
+```
+
+```ruby
+#터미널
+july0325:~/workspace/sinatra-test $ touch views/erbfile.erb
+july0325:~/workspace/sinatra-test $ ruby app.rb -o $IP
+[2018-06-07 07:39:18] INFO  WEBrick 1.3.1
+[2018-06-07 07:39:18] INFO  ruby 2.4.0 (2016-12-24) [x86_64-linux]
+== Sinatra (v2.0.2) has taken the stage on 8080 for development with backup from WEBrick
+[2018-06-07 07:39:18] INFO  WEBrick::HTTPServer#start: pid=3024 port=8080
+222.107.238.24 - - [07/Jun/2018:07:39:21 +0000] "GET / HTTP/1.1" 200 20 0.0041
+10.240.0.25 - - [07/Jun/2018:07:39:21 UTC] "GET / HTTP/1.1" 200 20
+https://ide.c9.io/july0325/class0607 -> /
+2018-06-07 07:39:45 - NoMethodError - undefined method `erb' for :erbfile:Symbol:
+        app.rb:32:in `block in <main>'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1635:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1635:in `block in compile!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:992:in `block (3 levels) in route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1011:in `route_eval'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:992:in `block (2 levels) in route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1040:in `block in process_route'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1038:in `catch'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1038:in `process_route'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:990:in `block in route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:989:in `each'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:989:in `route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1097:in `block in dispatch!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `block in invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `catch'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1094:in `dispatch!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:924:in `block in call!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `block in invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `catch'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:924:in `call!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:913:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/xss_header.rb:18:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/path_traversal.rb:16:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/json_csrf.rb:26:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/base.rb:50:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/base.rb:50:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/frame_options.rb:31:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/logger.rb:15:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/common_logger.rb:33:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:231:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:224:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/head.rb:12:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/method_override.rb:22:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/show_exceptions.rb:22:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:194:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1958:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1502:in `block in call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1729:in `synchronize'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1502:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/handler/webrick.rb:86:in `service'
+        /usr/local/rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/webrick/httpserver.rb:140:in `service'
+        /usr/local/rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/webrick/httpserver.rb:96:in `run'
+        /usr/local/rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/webrick/server.rb:290:in `block in start_thread'
+10.240.1.191 - - [07/Jun/2018:07:39:45 UTC] "GET /erbfile HTTP/1.1" 500 130269
+- -> /erbfile
+222.107.238.24 - - [07/Jun/2018:07:39:45 +0000] "GET /__sinatra__/500.png HTTP/1.1" 200 24378 0.0021
+10.240.1.191 - - [07/Jun/2018:07:39:45 UTC] "GET /__sinatra__/500.png HTTP/1.1" 200 24378
+https://class0607-july0325.c9users.io/erbfile -> /__sinatra__/500.png
+^C== Sinatra has ended his set (crowd applauds)
+[2018-06-07 07:41:44] INFO  going to shutdown ...
+[2018-06-07 07:41:44] INFO  WEBrick::HTTPServer#start done.
+july0325:~/workspace/sinatra-test $ gem install sinatra-contrib
+Fetching: backports-2.8.2.gem (100%)
+Successfully installed backports-2.8.2
+Fetching: multi_json-1.13.1.gem (100%)
+Successfully installed multi_json-1.13.1
+Fetching: sinatra-contrib-2.0.2.gem (100%)
+Successfully installed sinatra-contrib-2.0.2
+3 gems installed
+july0325:~/workspace/sinatra-test $ ruby app.rb -o $IP                                                                 
+[2018-06-07 07:43:47] INFO  WEBrick 1.3.1
+[2018-06-07 07:43:47] INFO  ruby 2.4.0 (2016-12-24) [x86_64-linux]
+== Sinatra (v2.0.2) has taken the stage on 8080 for development with backup from WEBrick
+[2018-06-07 07:43:47] INFO  WEBrick::HTTPServer#start: pid=3075 port=8080
+222.107.238.24 - - [07/Jun/2018:07:43:51 +0000] "GET / HTTP/1.1" 200 20 0.0042
+10.240.0.25 - - [07/Jun/2018:07:43:51 UTC] "GET / HTTP/1.1" 200 20
+https://ide.c9.io/july0325/class0607 -> /
+222.107.238.24 - - [07/Jun/2018:07:44:05 +0000] "GET /erbfile HTTP/1.1" 200 11 0.0079
+10.240.1.191 - - [07/Jun/2018:07:44:05 UTC] "GET /erbfile HTTP/1.1" 200 11
+- -> /erbfile
+^C== Sinatra has ended his set (crowd applauds)
+[2018-06-07 07:44:40] INFO  going to shutdown ...
+[2018-06-07 07:44:40] INFO  WEBrick::HTTPServer#start done.
+july0325:~/workspace/sinatra-test $ ruby app.rb -o $IP
+[2018-06-07 07:45:07] INFO  WEBrick 1.3.1
+[2018-06-07 07:45:07] INFO  ruby 2.4.0 (2016-12-24) [x86_64-linux]
+== Sinatra (v2.0.2) has taken the stage on 8080 for development with backup from WEBrick
+[2018-06-07 07:45:07] INFO  WEBrick::HTTPServer#start: pid=3549 port=8080
+27
+222.107.238.24 - - [07/Jun/2018:07:45:59 +0000] "GET /cube/3 HTTP/1.1" 200 11 0.0065
+10.240.0.64 - - [07/Jun/2018:07:45:59 UTC] "GET /cube/3 HTTP/1.1" 200 11
+- -> /cube/3
+2018-06-07 07:46:52 - TypeError - no implicit conversion of Integer into String:
+        /home/ubuntu/workspace/sinatra-test/app.rb:28:in `+'
+        /home/ubuntu/workspace/sinatra-test/app.rb:28:in `block in <top (required)>'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1635:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1635:in `block in compile!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:992:in `block (3 levels) in route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1011:in `route_eval'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:992:in `block (2 levels) in route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1040:in `block in process_route'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1038:in `catch'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1038:in `process_route'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:990:in `block in route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:989:in `each'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:989:in `route!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1097:in `block in dispatch!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `block in invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `catch'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1094:in `dispatch!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:924:in `block in call!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `block in invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `catch'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1076:in `invoke'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:924:in `call!'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:913:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/xss_header.rb:18:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/path_traversal.rb:16:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/json_csrf.rb:26:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/base.rb:50:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/base.rb:50:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-protection-2.0.2/lib/rack/protection/frame_options.rb:31:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/logger.rb:15:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/common_logger.rb:33:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:231:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:224:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/head.rb:12:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/method_override.rb:22:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/show_exceptions.rb:22:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:194:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1958:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1502:in `block in call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1729:in `synchronize'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/sinatra-2.0.2/lib/sinatra/base.rb:1502:in `call'
+        /usr/local/rvm/gems/ruby-2.4.0/gems/rack-2.0.5/lib/rack/handler/webrick.rb:86:in `service'
+        /usr/local/rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/webrick/httpserver.rb:140:in `service'
+        /usr/local/rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/webrick/httpserver.rb:96:in `run'
+        /usr/local/rvm/rubies/ruby-2.4.0/lib/ruby/2.4.0/webrick/server.rb:290:in `block in start_thread'
+10.240.1.191 - - [07/Jun/2018:07:46:52 UTC] "GET /cube/5 HTTP/1.1" 500 133415
+- -> /cube/5
+222.107.238.24 - - [07/Jun/2018:07:46:53 +0000] "GET /__sinatra__/500.png HTTP/1.1" 304 - 0.0021
+10.240.1.191 - - [07/Jun/2018:07:46:53 UTC] "GET /__sinatra__/500.png HTTP/1.1" 304 0
+https://class0607-july0325.c9users.io/cube/5 -> /__sinatra__/500.png
+
+```
+
+
+
