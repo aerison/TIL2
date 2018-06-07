@@ -545,6 +545,80 @@ from (pry):3:in `__pry__'
 [5] pry(main)> "#{name}님 안녕하세요 "
 => "aeri님 안녕하세요 "
 
+[6] pry(main)> my_name="aeri son"
+=> "aeri son"
+[7] pry(main)> my_name.upcase
+=> "AERI SON"#원본데이터는 바뀌지않음!
+[8] pry(main)> my_name.upcase!
+=> "AERI SON"#원본데이터 자체가 바꿈!
 
 ```
 
+- symbol/배열
+
+```ruby
+[9] pry(main)> array=[]
+=> []
+[10] pry(main)> array<<5
+=> [5]
+[11] pry(main)> array<<10
+=> [5, 10]
+[12] pry(main)> array<<"string"
+=> [5, 10, "string"]
+[13] pry(main)> array<<:s
+=> [5, 10, "string", :s]
+[14] pry(main)> array<<true
+=> [5, 10, "string", :s, true]
+[15] pry(main)> array[1..2]
+=> [10, "string"]
+```
+
+아왜 오류나
+
+- case
+
+  ```ruby
+  
+  ```
+
+  
+
+- hash(key+value)
+
+```ruby
+hash={:key=>value}
+hash2={ key: value }
+hash3={ "key" => value }
+
+[17] pry(main)> array=[]
+=> []
+[18] pry(main)> hash={}
+=> {}
+[19] pry(main)> hash.class
+=> Hash
+[20] pry(main)> array.class
+=> Array
+[21] pry(main)> hash1={name: "aeri", :age=>27, "hometown"=>"jeju"}
+=> {:name=>"aeri", :age=>27, "hometown"=>"jeju"}
+[22] pry(main)> hash1["hometown"]
+=> "jeju"
+[23] pry(main)> hash1[name]
+=> nil
+[24] pry(main)> hash1["name"]
+=> nil
+[25] pry(main)> hash1[:name]
+=> "aeri"
+#||안에 k와 v는 어떠한 것으로 써도됨
+[26] pry(main)> hash1.each do|k,v|
+[26] pry(main)*   puts "#{k}:#{v}"
+[26] pry(main)* end  
+name:aeri
+age:27
+hometown:jeju
+=> {:name=>"aeri", :age=>27, "hometown"=>"jeju"}
+
+
+
+```
+
+- https://gist.github.com/nacyot/7624036
