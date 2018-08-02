@@ -1,0 +1,240 @@
+cd vvagrant up
+
+vagrant ssh
+
+user@user-PC MINGW64 ~
+$ pwd
+/c/Users/user
+
+user@user-PC MINGW64 ~
+$ mkdir vagrant
+
+user@user-PC MINGW64 ~
+$ cd vagrant/
+
+user@user-PC MINGW64 ~/vagrant
+$ vagrant init
+A `Vagrantfile` has been placed in this directory. You are now
+ready to `vagrant up` your first virtual environment! Please read
+the comments in the Vagrantfile as well as documentation on
+`vagrantup.com` for more information on using Vagrant.
+
+user@user-PC MINGW64 ~/vagrant
+$ vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'ubuntu/xenial64' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+The box 'ubuntu/xenial64' could not be found or
+could not be accessed in the remote catalog. If this is a private
+box on HashiCorp's Atlas, please verify you're logged in via
+`vagrant login`. Also, please double-check the name. The expanded
+URL and error message are shown below:
+
+URL: ["https://atlas.hashicorp.com/ubuntu/xenial64"]
+Error: The requested URL returned error: 404 Not Found
+
+user@user-PC MINGW64 ~/vagrant
+$ vagrant up
+There was an error loading a Vagrantfile. The file being loaded
+and the error message are shown below. This is usually caused by
+a syntax error.
+
+Path: C:/Users/user/vagrant/Vagrantfile
+Line number: 8vag
+Message: NameError: uninitialized constant Vagrant::DEFAULT_SERVER_URI
+
+user@user-PC MINGW64 ~/vagrant
+$ vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'ubuntu/xenial64' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+==> default: Loading metadata for box 'ubuntu/xenial64'
+    default: URL: https://vagrantcloud.com/ubuntu/xenial64
+==> default: Adding box 'ubuntu/xenial64' (v20180614.0.0) for provider: virtualbox
+    default: Downloading: https://vagrantcloud.com/ubuntu/boxes/xenial64/versions/20180614.0.0/providers/virtualbox.box
+    default: Progress: 52% (Rate: 100k/s, Estimated time remaining: 0:08:23)
+
+
+vagrant ssh(제니엘로 접속exit으로 나감)
+
+cd /
+
+https://gorails.com/setup/ubuntu/16.04
+
+
+
+ls
+vagrant라는폴더가있움!(리눅스랑 윈도우랑 공유하는폴더)
+
+vagrant랑 ruby깔았음 rails
+/////////////////////
+
+
+
+cd vagrant:베이그란트 파일이 있는 폴더로 이동!
+vagrant up :컴터키기
+vagrant ssh:접속
+vagrant halt:컴터끄기
+
+atom에디터 사용
+
+ssh 로접속후
+/$ cd /vagrant/ 공유폴더로 이동
+ rails new simpleapp
+cd simpleapp
+rails s
+인터넷창을 열어서,
+localhost:3000
+
+아톰에서 폴더열기 >
+
+
+
+
+
+===========
+ 사용시
+vagrant 폴더안에서 git bash 
+해서 
+vagrant up
+vagrant ssh
+
+
+
+vagrant@ubuntu-xenial:~$ cd /vagrant
+vagrant@ubuntu-xenial:/vagrant$
+여기서 시작!
+
+
+rails new firstapp
+ls
+cd firstapp
+ls
+아톰에서 열어보면, 
+제니엘 안들어간상태에서
+해당폴더가서 atom .하면 거기로 접속됨.
+
+rails s:서버구동
+
+ctrl+c하고,
+appfirtst안에서
+rials generate controller home
+rials g controller home
+하면 아톰에서 보면 app>controllers>hone_controller생김
+rails g controller hi index
+
+
+config>routes.rb에도, 생김! get 
+
+
+firacode 폰트 인스톨
+
+
+
+아톰으로 잼파일 수정하고 나면 서버끄고
+vagrant@ubuntu-xenial:/vagrant/firstapp$ bundle install
+번들인스톨
+
+Last login: Mon Jun 18 08:33:31 2018 from 10.0.2.2
+vagrant@ubuntu-xenial:~$ ls
+vagrant@ubuntu-xenial:~$ cd /vagrant
+vagrant@ubuntu-xenial:/vagrant$ ls
+firstapp  simpleapp  ubuntu-xenial-16.04-cloudimg-console.log  Vagrantfile
+vagrant@ubuntu-xenial:/vagrant$ 
+
+
+
+board만들고,
+에드커밋 후,
+vagrant@ubuntu-xenial:/vagrant$ cd board/
+vagrant@ubuntu-xenial:/vagrant/board$ rails s
+
+
+vagrant@ubuntu-xenial:/vagrant/board$ rails g controller post index new create
+
+vagrant@ubuntu-xenial:/vagrant/board$ rails g model post(class post 객체를 만들었을뿐)
+
+db폴더안에, 2018~tn수정후(마이그레이션 파일-구조잡음)
+rake db:migrate   >이게 테이블만드는것임!>스키마생성됨
+rake db:drop  >drop시키는것
+
+
+
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rails_db'
+end
+
+젬 추가 해주고 , bundle install 후 서버 스타트
+
+http://localhost:3000/rails/db 하면
+다양한 디비볼수있음!
+
+vagrant@ubuntu-xenial:/vagrant/board$ rails console
+Running via Spring preloader in process 2156
+Loading development environment (Rails 5.2.0)
+irb(main):001:0> post.all
+NameError: undefined local variable or method `post' for main:Object
+        from (irb):1
+irb(main):002:0> Post.all
+  Post Load (5.3ms)  SELECT  "posts".* FROM "posts" LIMIT ?  [["LIMIT", 11]]
+=> #<ActiveRecord::Relation [#<Post id: 1, title: "2번글", body: "안녕안녕", created_at: "2018-06-19 01:30:39", updated_at: "2018-06-19 01:30:39">]>
+irb(main):003:0>Post.create(title:"test",body:"test")
+
+하면 commit transation됨
+Post.all하면 다시 전부 나옴
+
+컨트롤러 수정
+뷰(인덱스.erb수정)ㄴ
+
+rbenv install 2.3.5
+rbenv global 2.3.5
+ruby -v
+
+
+
+gem install bundler
+gem install rails -v 4.2.10
+
+
+rails g controller posts index new create
+
+rails g model post
+마이그레이션 파일 수정후
+rake db:migrate
+gem 'rails_db'
+
+bundle install
+
+
+
+
+
+vagrant@ubuntu-xenial:/vagrant/blog$ rails s -b 0.0.0.0
+
+
+
+rails active record 기초:추가문법있움!
+
+erb에서 루비문법을 쓸때
+<%%>
+=있으면 프린트하겟단말
+
+파람즈는
+irb
+
+v폴더안에 들어가서
+번들인스톨 레이크디비 마이그레잇
+
+git remote rm origin
+git remote add origin 조소
+git push origin master
+
+
+카카오디벨로퍼스 .....rest api
+
+
+
