@@ -1,0 +1,1616 @@
+linux
+3월13(화)
+
+
+vi /etc/sysconfig/network-skripts/ifcfg-ens33
+맥어드레스랑, 아이피 바꿈!
+
+
+vi /etc/hostname-->server1으로 바꾸고
+			 2
+
+vi /etc/hosts
+192.168.111.100 server1:wq: 추가//ipaddr와 hostname등록해놓아야한다.
+192.168.111.200 server2:
+
+
+systemctl restart network
+ifconfig
+
+0314
+ls -l /usr/bin/java
+hostname
+
+
+ping server1으로 hadoop살아있나확인
+
+
+하둡압축풀고
+cp -r hadoop-1.2.1 /usr/local
+하면설치끝!
+
+
+JAVA_HOME=/usr/local/jdk9.0.4
+     53 HADOOP_HOME=/usr/local/hadoop-1.2.1
+     54 CLASSPATH=/usr/local/jdk-9.0.4/lib
+
+나머지는 hadoop_hive 에서 확인할것!
+
+1.down .tar xvf
+2.profile
+3.configuration
+http://192.168.111.100:50070
+
+----------
+서버 네대 더 만들어서
+
+
+
+00:50:56:3F:D9:2C
+master
+192.168.111.101
+
+slave1
+00:50:56:33:48:7D
+192.168.111.102
+
+slave2
+00:50:56:31:59:BA
+192.168.111.103
+
+slave3
+00:50:56:35:61:E2
+192.168.111.104
+
+
+
+
+
+
+192.168.111.100 server1
+192.168.111.200 server2
+192.168.111.101 master
+192.168.111.102 slave1
+192.168.111.103 slave2
+192.168.111.104 slave3
+
+
+
+
+
+systemctl stop firewalld
+[root@server1 conf]# systemctl disable firewalld
+ifconfig
+
+
+
+ vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+
+------------------------------------------
+
+server1에서
+
+start-all.sh
+jps  //현재동작되는 process check
+
+
+
+stop-all.sh해놓고
+아까 xml파일들 다 localhost 수정
+localhost자리에 192.168.111.100으로 바꾸어주고, 50070
+hdfs-site.xml
+에는 4줄복사하고, 
+name 위에 
+name> dfs.http.address
+value> localhost자리에 192.168.111.100으로 바꾸어주고, 50070
+
+
+C:\Windows\System32\drivers\etc 에서 hosts파일을 word로 열어서
+192.168.111.100 server1
+맨아래 기입.. 다시하면됨1
+다시 start-all.sh
+후 크롬에서키면 됨!
+
+
+
+
+cd /usr/local/hadoop-1.2.1
+hadoop dfs -mkdir /test
+
+하면 테스트라는 폴더생김 dfs는 하둡명령어를 쓰겠단말
+
+데이터넣기:hadoop dfs -put README.txt /test
+"리눅스 하둡에 있는 파일을 넣겠다!"
+
+
+
+
+data폴더만들고,
+hadoop jar hadoop-examples-1.2.1.jar wordcount /test /result
+test에 있는 readme.txt를 읽어서 /result라는 폴더에 결과를 만들어라.
+
+result 폴더에 part-0000은 단어수 센거.
+
+cd src/examples/org/apach/hadoop/examples
+vi WordCount.java   -->이게 아까 카운트 센것! 맵리듀스
+
+이걸 spring mvc에서 받아서 visualization까지 시켜야함
+----------------------------------------------------------
+2018/3/15
+
+
+새로운 클러스터를 생성
+namenode
+secondname
+datanode1
+datanode2
+
+1.master ->namenode
+192.168.111.110
+00:50:56:3D:92:0E
+
+
+
+2.slave1 -> secondname
+192.168.111.111
+00:50:56:33:26:16
+
+
+
+3.slave2 ->datanode1
+192.168.111.112
+00:50:56:3B:D2:17
+
+
+
+4.slave3 ->datanode2
+192.168.111.113
+00:50:56:2F:4A:33
+
+
+vi /etc/sysconfig/network-skripts/ifcfg-ens33
+맥어드레스랑, 아이피 바꿈!
+
+
+vi /etc/hostname-->server1으로 바꾸고
+			 2
+
+vi /etc/hosts
+192.168.111.100 server1:wq: 추가//ipaddr와 hostname등록해놓아야한다.
+192.168.111.200 server2:
+192.168.111.110 namenode
+192.168.111.111 secondname
+192.168.111.112 datanode1
+192.168.111.113 datanode2
+
+
+
+systemctl restart network
+ifconfig
+
+0314
+ls -l /usr/bin/java
+hostname
+
+
+ping server1으로 hadoop살아있나확인
+
+
+하둡압축풀고
+cp -r hadoop-1.2.1 /usr/local
+하면설치끝!
+
+
+-------------
+1.master에 hadoop sw설치
+
+
+
+
+ls -a :전부?
+
+2.  conf 가서, xml파일수정 p.58  퍼블릭키
+
+
+[root@master ~]# cd .ssh
+[root@master .ssh]# ls
+id_dsa  id_dsa.publs
+[root@master .ssh]# cat id_dsa.pub >> authorized_keys
+[root@master .ssh]# ls
+authorized_keys  id_dsa  id_dsa.pub
+[root@master .ssh]# cd /usr/local/hadoop-1.2.1/conf
+[root@master conf]# vi hadoop-env.sh 
+export JAVA_HOME=/usr/local/jdk-9.0.4
+p.54
+
+
+
+[root@master conf]# ls
+capacity-scheduler.xml      hadoop-policy.xml      slaves
+configuration.xsl           hdfs-site.xml          ssl-client.xml.example
+core-site.xml               log4j.properties       ssl-server.xml.example
+fair-scheduler.xml          mapred-queue-acls.xml  task-log4j.properties
+hadoop-env.sh               mapred-site.xml        taskcontroller.cfg
+hadoop-metrics2.properties  masters
+[root@master conf]# vi masters     slave1
+[root@master conf]# vi slaves      slave1,2,3
+
+[root@master conf]# vi core-site.xml 
+
+<property>
+  <name>fs.default.name</name>
+  <value>hdfs://master:9000</value>
+ </property>
+ <property>
+  <name>hadoop.tmp.dir</name>
+  <value>/usr/local/hadoop-1.2.1/tmp</value>
+ </property>
+
+
+
+[root@master conf]# vi hdfs-site.xml 
+<property>
+  <name>dfs.replication</name>
+  <value>2</value>
+ </property>
+ <property>
+  <name>dfs.http.address</name>
+  <value>master:50070</value>
+ </property>
+ <property>
+  <name>dfs.secondary.http.address</name>
+  <value>slave1:50090</value>
+ </property>
+ <property>
+  <name>dfs.data.dir</name>
+  <value>/usr/local/hadoop-1.2.1/data</value>
+ </property>
+ <property>
+  <name>dfs.name.dir</name>
+  <value>/usr/local/hadoop-1.2.1/name</value>
+ </property>
+ <property>
+  <name>dfs.webhdfs.enabled</name>
+  <value>true</value>
+ </property>
+
+
+
+[root@master conf]# vi mapred-site.xml 
+<property>
+<name>mapred.job.tracker</name>
+  <value>master:9001</value>
+ </property>
+
+
+
+
+
+
+
+
+
+
+[root@master conf]# cd
+[root@master ~]# cd .ssh
+[root@master .ssh]# ssh-copy-id -i id_dsa.pub root@slave1
+
+slave 1,2,3에 키 배포하고, 
+
+
+
+3.환경설정하고, hadoop dir 복사해서, 컴퓨터 slave1,2,3에 보냄!
+
+[root@master .ssh]# scp /etc/profile root@slave1:/etc/profile
+profile                                       100% 1935     1.9KB/s   00:00    
+[root@master .ssh]# scp /etc/profile root@slave2:/etc/profile
+profile                                       100% 1935     1.9KB/s   00:00    
+[root@master .ssh]# scp /etc/profile root@slave3:/etc/profile
+profile                                       100% 1935     1.9KB/s   00:00  
+
+
+scp -r /usr/local/hadoop-1.2.1 root@slave1:/usr/local
+
+1,2,3다 함!
+
+컴퓨터 네대 다 리부팅!
+master에서 포멧
+[root@master ~]# cd /usr/local/hadoop-1.2.1/
+[root@master hadoop-1.2.1]# hadoop namenode -format
+
+start-all.sh
+jps치면 master에는 세개
+나머지는 네개씩뜸
+안되면,,, 하둡지우고 다시배포
+rm-rf /usr/local/
+
+
+
+
+C:\Windows\System32\drivers\etc  hosts열어서
+ipadress적어주고 master기입후
+저장, 
+크롬에 http://master:50070치면 나옴!
+
+
+
+hadoop dfs -mkdir /data  :데이터 폴더생성됨
+
+하둡들어가서, 
+hadoop dfs -put README.txt /data
+
+master:50030
+--reduce나옴
+
+4. /etc/profile
+
+source /etc/profile  :재지정... 혹시 적용안될수도 있으니..
+
+
+
+
+5.p.138 사이트 접속 후 데이터 다운로드
+--------------------------------------------
+
+server1 에서, 
+cd ~
+에서 
+start-all.sh
+jps
+hadoop dfs -ls /
+hadoop fs -lsr /  :하둡내부까지 다 보는것... 관리자만,,
+
+
+vi mapred-site.xml에 있는 9001번 포트는 맵리듀스 처리/요청하는 포트
+
+---------------
+20180316 Hive의 설치
+
+p.566
+
+
+
+1.데이터다운로드 후 압축품
+2.마리아 디비 깔고,, 사용자계정만듦..사용자가 hive임
+3.하이브설치!
+
+
+
+
+리눅스 p.555 부터 ~마리아 디비깔고~
+chkconfig mysql on
+[root@server1 다운로드]# mysqladmin -u root password '111111'
+[root@server1 다운로드]# mysql -u root -p
+use mysql
+select user,host from user;
+
+ grant all privileges on *.* to 'hive'@'localhost' identified by '111111';
+
+로컬호스트에서 오는 모든계정에게 권한을 주겠습니다.
+ grant all privileges on *.* to 'hive'@'%' identified by '111111';
+다른아이피에게도 모든 권한을 부여
+
+create database hive_db;
+commit;
+
+
+mysql -u root -p;
+use hive_db;
+quit;
+
+
+
+root@server1 다운로드]# tar xvfz apache-hive-1.0.1-bin.tar.gz 
+
+
+cp -r apache-hive-1.0.1-bin /usr/local/hive-1.0.1
+
+
+
+[root@server1 다운로드]# vi /etc/profile
+
+ JAVA_HOME=/usr/local/jdk1.8.0_161
+     53  HADOOP_HOME=/usr/local/hadoop-1.2.1
+     54 HIVE_HOME=/usr/local/hive-1.0.1
+     55 CLASSPATH=/usr/local/jdk1.8.0_161/lib
+     56 export JAVA_HOME HADOOP_HOME HIVE_HOME CLASSPATH
+     57 PATH=$HADOOP_HOME/bin:$JAVA_HOME/bin:$HIVE_HOME/bin:$PATH
+워드도 함께참고할것
+
+
+
+[root@server1 다운로드]# cd ~
+[root@server1 ~]# cd /usr/local
+[root@server1 local]# ls
+bin      etc    hadoop-1.2.1  include  jdk-9.0.4  lib64    sbin   src
+eclipse  games  hive-1.0.1    java     lib        libexec  share
+[root@server1 local]# cd hive-1.0.1/
+[root@server1 hive-1.0.1]# cd /conf
+bash: cd: /conf: 그런 파일이나 디렉터리가 없습니다
+[root@server1 hive-1.0.1]# cd conf
+[root@server1 conf]# vi hive-site.xml
+[root@server1 conf]# touch hive-site.xml  --만들어줌! xml파일을
+[root@server1 conf]# vi hive-site.xml  --쌤주신파일복사넣기
+
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>hive.metastore.local</name>
+        <value>true</value>
+        <description>controls whether to connect to remove metastore server or open a new metastore server in Hive Client JVM</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mariadb://localhost:3306/hive_db?createDatabaseIfNotExist=true</value>
+        <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>org.mariadb.jdbc.Driver</value>
+        <description>Driver class name for a JDBC metastore</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>hive</value>
+        <description>username to use against metastore database</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>111111</value>
+        <description>password to use against metastore database</description>
+    </property>
+</configuration>
+
+
+
+
+마리아디비 클라이언트 자르 파일 다운로드에 넣어놓음
+
+oot@server1 다운로드]cp mariadb-java-client-1.3.5.jar /usr/local/hive-1.0.1/lib
+
+
+
+ hadoop dfs -mkdir /tmp/hive
+
+
+
+오류생김 jdk 버전문제
+
+1.jdk를 푼다
+2./usr/local/jdk1.8.0_161로 복사
+3./usr/bin에서 java를ㄹ 삭제
+ln -s /usr/local/jdk1.8.0_161/bin/java java
+
+4.하둡으로 가서 네임하고 데이터 지우고 conf가서
+hadoop-env.sh
+가서 버전낮춤
+
+로컬에서 하이브폴더삭제 
+다운로드가서 카피 아파치하이브 
+
+
+[root@server1 ~]# cd 다운로드
+[root@server1 다운로드]# cp -r apache-hive-1.0.1-bin /usr/local/hive-1.0.1
+[root@server1 다운로드]# vi /etc/profile (확인)
+[root@server1 다운로드]# 
+
+하둡포멧하고 hadoop namenode -format
+
+하둡실행 start-all.sh
+jps
+
+
+cd
+ls
+:metadata없음
+
+크롬에가서 server1:50070
+
+/로세팅됨
+
+/tmp/hive
+/user/hive/
+
+[root@server1 ~]# hadoop dfs -mkdir /tmp/hive
+
+[root@server1 ~]# hadoop dfs -chmod 777 /tmp
+[root@server1 ~]# hadoop dfs -chmod 777 /tmp/hive
+[root@server1 ~]# hive
+
+Logging initialized using configuration in jar:file:/usr/local/hive-1.0.1/lib/hive-common-1.0.1.jar!/hive-log4j.properties
+hive> 
+    > quit;
+
+
+지금은 마리아디비안쓰는경우임.
+ls치면, 
+
+metastore_db  생김
+
+
+
+일단 지우고, 
+
+rm -rf metastore_db/
+[root@server1 ~]# ls
+airline          initial-setup-ks.cfg  공개      바탕화면  서식
+anaconda-ks.cfg  server1.txt           다운로드  비디오    음악
+derby.log        server2_2.txt         문서      사진
+[root@server1 ~]# cd /usr/local/hive-1.0.1/conf
+[root@server1 conf]# touch hive-site.xml
+[root@server1 conf]# vi hive-site.xml 
+[root@server1 conf]# 
+에 들어가서 
+
+
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>hive.metastore.local</name>
+        <value>true</value>
+        <description>controls whether to connect to remove metastore server or open a new metastore server in Hive Client JVM</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mariadb://localhost:3306/hive_db?createDatabaseIfNotExist=true</value>
+        <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>org.mariadb.jdbc.Driver</value>
+        <description>Driver class name for a JDBC metastore</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>hive</value>
+        <description>username to use against metastore database</description>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>111111</value>
+        <description>password to use against metastore database</description>
+    </property>
+</configuration>
+
+저장!
+이건한글깨지는 거 방지!
+<property>        
+    <name>mapred.child.java.opts</name>
+    <value>-Xmx200m -Dfile.encoding=utf-8</value>
+    <description>Java opts for the task tracker child processes.  Subsumes
+    ‘mapred.child.heap.size’ (If a mapred.child.heap.size value is found
+    in a configuration, its maximum heap size will be used and a warning
+    emitted that heap.size has been deprecated). Also, the following symbols,
+    if present, will be interpolated: @taskid@ is replaced by current TaskID;
+    and @port@ will be replaced by mapred.task.tracker.report.port + 1 (A second
+    child will fail with a port-in-use if mapred.tasktracker.tasks.maximum is
+    greater than one). Any other occurrences of ‘@’ will go unchanged. For
+    example, to enable verbose gc logging to a file named for the taskid in
+    /tmp and to set the heap maximum to be a gigabyte, pass a ‘value’ of:
+
+        -Xmx1024m -verbose:gc -Xloggc:/tmp/@taskid@.gc
+    </description>
+  </property> 
+
+
+
+[root@server1 다운로드]# cp mariadb-java-client-1.3.5.jar /usr/local/hive-1.0.1/lib
+
+
+cd
+hive
+[root@server1 ~]# hive
+18/03/16 16:41:23 WARN conf.HiveConf: DEPRECATED: Configuration property hive.metastore.local no longer has any effect. Make sure to provide a valid value for hive.metastore.uris if you are connecting to a remote metastore.
+18/03/16 16:41:23 WARN conf.HiveConf: HiveConf of name hive.metastore.local does not exist
+
+Logging initialized using configuration in jar:file:/usr/local/hive-1.0.1/lib/hive-common-1.0.1.jar!/hive-log4j.properties
+hive> 
+    > 
+    > 
+quit;
+ls 쳐보면 메타데이터 정보안생김@
+
+
+--------------------------------------------
+0319
+p.564
+하이브 도는지 확인하고
+설치했던 데이터로 간다
+
+
+[root@server1 ~]# mysql -u root -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 5
+Server version: 10.0.15-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2014, Oracle, SkySQL Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use hive_db
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [hive_db]> show databases;
+
+MariaDB [hive_db]> quit;
+Bye
+[root@server1 ~]# ls
+airline          initial-setup-ks.cfg  공개      바탕화면  서식
+anaconda-ks.cfg  server1.txt           다운로드  비디오    음악
+derby.log        server2_2.txt         문서      사진
+[root@server1 ~]# cd airline
+
+
+
+DATA
+data structure setting
+MariaDB(데이터의 구조만 들어감)
+Data load(하둡 데이터 노드에만 들어가고,)
+
+
+
+하이브로 들어가서, 구조를 만들어준다.
+
+[root@server1 airline]# hive
+18/03/19 09:43:26 WARN conf.HiveConf: DEPRECATED: Configuration property hive.metastore.local no longer has any effect. Make sure to provide a valid value for hive.metastore.uris if you are connecting to a remote metastore.
+18/03/19 09:43:26 WARN conf.HiveConf: HiveConf of name hive.metastore.local does not exist
+
+Logging initialized using configuration in jar:file:/usr/local/hive-1.0.1/lib/hive-common-1.0.1.jar!/hive-log4j.properties
+hive> CREATE TABLE airline_delay(
+Year INT,
+MONTH INT,
+DayofMonth INT,
+DayofWeek INT,
+DepTime INT,
+CRSDepTime INT,
+ArrTime INT,
+CRSArrTime INT,
+UniqueCarrier STRING,
+FlightNum INT,
+TailNum STRING,
+ActualElapsedTime INT,
+CRSElapsedTime INT,
+AirTime INT,
+ArrDelay INT,
+DepDelay INT,
+Origin STRING,
+Dest STRING,
+Distance INT,
+TaxiIn INT,
+TaxiOut INT,
+Cancelled INT,
+CancellationCode STRING
+COMMENT 'A = carrier, B = weather, C = NAS, D = security',
+Diverted INT COMMENT '1 = yes, 0 = no',
+CarrierDelay STRING,
+WeatherDelay STRING,
+NASDelay STRING,
+SecurityDelay STRING,
+LateAircraftDelay STRING)
+COMMENT 'TEST DATA'
+PARTITIONED BY (delayYear INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+
+
+OK
+Time taken: 1.399 seconds
+hive> 
+    > 
+
+hive> 
+    > show tables
+    > 
+    > ;                    
+OK
+airline_delay
+Time taken: 0.102 seconds, Fetched: 1 row(s)
+hive>    
+
+
+drop table하면 없앨수 있음
+하둡망가져서 데이터,네임지우고 포멧다시함
+
+
+데이터 로드하기! 
+
+
+
+
+hive> 
+hive> LOAD DATA LOCAL INPATH '/root/airline/2006.csv'
+OVERWRITE INTO TABLE airline_delay             
+PARTITION (delayYear='2006');                  
+Loading data to table default.airline_delay partition (delayyear=2006)
+Partition default.airline_delay{delayyear=2006} stats: [numFiles=1, numRows=0, totalSize=672068096, rawDataSize=0]
+OK
+Time taken: 28.977 seconds
+
+hive> LOAD DATA LOCAL INPATH '/root/airline/2007.csv'
+OVERWRITE INTO TABLE airline_delay             
+PARTITION (delayYear='2007');                  
+Loading data to table default.airline_delay partition (delayyear=2007)
+Partition default.airline_delay{delayyear=2007} stats: [numFiles=1, numRows=0, totalSize=702878193, rawDataSize=0]
+OK
+Time taken: 26.15 seconds
+hive> LOAD DATA LOCAL INPATH '/root/airline/2008.csv'
+OVERWRITE INTO TABLE airline_delay             
+PARTITION (delayYear='2008');                  
+Loading data to table default.airline_delay partition (delayyear=2008)
+Partition default.airline_delay{delayyear=2008} stats: [numFiles=1, numRows=0, totalSize=689413344, rawDataSize=0]
+OK
+Time taken: 20.513 seconds
+
+
+
+
+
+꺼내보기1
+
+hive> 
+hive> SELECT Year,Month,Count(*) FROM airline_delay
+    > where delayYear=2006
+    > AND ArrDelay > 0
+    > GROUP BY Year, Month;
+
+
+
+hive> SELECT Year, Month, AVG(ArrDelay) AS Avg_arr, AVG(DepDelay) AS 
+    > Avg_dep                                                        
+    > FROM airline_delay                                             
+    > WHERE delayYear=2006                                           
+    > AND ArrDelay > 0                                               
+    > GROUP BY Year, Month;   
+p.578
+
+
+
+hive> SELECT Year, Month, AVG(ArrDelay) AS Avg_arr, AVG(DepDelay) AS 
+    > Avg_dep                                                        
+    > FROM airline_delay                                             
+    > WHERE delayYear IN (2006,2007)                                 
+    > AND ArrDelay > 0                                               
+    > GROUP BY Year, Month
+       ORDER BY Year, Month; 
+
+
+
+
+
+sql문으로 분석요청 
+
+
+
+
+백그라운드에서 돌리기!
+[root@server1 ~]# hive --service hiveserver2
+하면 이클립스에 출력할 수 있음!
+
+뉴프로젝트 > 자르파일! 설정
+클래스 만들어서 출력
+
+
+package hive;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class HiveTest {
+
+	  public static void main(String[] args) throws Exception{
+	      // TODO Auto-generated method stub
+	      Class.forName("org.apache.hive.jdbc.HiveDriver");
+	      Connection conn = DriverManager.getConnection(
+	    		  "jdbc:hive2://192.168.111.100:10000/default","root","111111");
+	      Statement stmt = conn.createStatement();
+	      
+	      //2006년 월별 지연출발, 지연도착 평균을 구하시오
+	      ResultSet rs = stmt.executeQuery("SELECT Year, Month, AVG(ArrDelay) ,AVG(Depdelay)"
+	      		+ "FROM airline_delay "
+	      		+ "WHERE delayYear=2006 "
+	      		+ "AND ArrDelay > 0 "
+	      		+"GROUP BY Year, Month "
+	      		+ "ORDER BY Year, Month ");
+	      		
+	         while(rs.next()) {
+	           System.out.println(rs.getInt(1)+" "
+	         +rs.getInt(2)+" "
+	         +rs.getInt(3)+" "
+	         +rs.getInt(4));
+	         }
+	      conn.close();
+	      System.out.println("Success....");
+
+	   }
+
+	}
+
+
+
+하면, vmware에 ok뜨고,
+이클립스 콘솔창에 정보출력됨
+
+source /etc/profile 하면 하이브 안꺼짐! 대박적!
+
+
+http://stat-computing.org/dataexpo/2009/supplemental-data.html
+
+에들어가서 에어포트랑 캐리어 csv다운	
+하둡책 138
+@master airline]# bzip2 -kd 200*.csv.bz2
+
+테이블생성하고, 로드한다.
+581
+에어라인에서 하이브
+
+[root@server1 ~]# cd airline
+[root@server1 airline]# ls
+2006.csv  2007.csv  2008.csv  airports.csv  carriers.csv
+[root@server1 airline]# hive
+18/03/19 14:10:17 WARN conf.HiveConf: DEPRECATED: Configuration property hive.metastore.local no longer has any effect. Make sure to provide a valid value for hive.metastore.uris if you are connecting to a remote metastore.
+18/03/19 14:10:17 WARN conf.HiveConf: HiveConf of name hive.metastore.local does not exist
+
+Logging initialized using configuration in jar:file:/usr/local/hive-1.0.1/lib/hive-common-1.0.1.jar!/hive-log4j.properties
+hive> create table carrier_code(Code String,Description String)
+row format delimited
+fields terminated by ','
+lines terminated by '\n'
+stored as textfile;
+
+시작할때와 데이터수정시, 로드하고,
+load data local inpath '/root/airline/carriers.csv'
+overwrite into table
+carrier_code;
+
+select *from carieer_code limit 10;
+
+찾아본다.
+조인!!--""있으므로 substring으로 잘라서 출력!
+
+select A.Year,A.UniqueCarrier,B.code,B.Description 
+from airline_delay A
+join carrier_code B
+on (A.UniqueCarrier=substr(B.code,2,2))
+where A.delayYear=2006
+limit 20;
+
+
+
+
+
+[root@server1 airline]# more carriers.csv
+
+를 쳐서 데이터를 열어봄.
+583에서 모든""제거
+
+[root@server1 airline]# find . -name carriers.csv -exec perl -p -i -e 's/"//g' {} \;
+[root@server1 airline]# more carriers.csv  해서 확인하면 "" 모두 삭제되어있음
+
+하이브에서 다시로드
+substring 없애고 다시 select 해봄
+
+load data local inpath '/root/airline/carriers.csv'
+overwrite into table
+carrier_code;
+
+select *from carieer_code limit 10;
+
+찾아본다.
+조인!!
+
+select A.Year,A.UniqueCarrier,B.code,B.Description 
+from airline_delay A
+join carrier_code B
+on (A.UniqueCarrier=B.code)
+where A.delayYear=2006
+limit 20;
+
+
+
+1.데이터가져오기
+www.data.go.kr
+http://data.seoul.go.kr/
+에 들어가서, 빅데이터 끌어올것!
+
+
+
+한글깨지면, 메모장가서변환@!
+utf-8로
+
+
+2.table 생성
+CREATE TABLE transport(
+Local String,
+Adult DOUBLE,
+Child DOUBLE,
+Teenager DOUBLE,
+Etc DOUBLE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+
+
+
+
+3.data load
+load data local inpath '/root/transport/transport2016.csv'
+overwrite into table
+transport;
+
+
+
+
+4.hive에서 데이터 분석
+select *from transport limit 5;
+테이블 널값나오거나 출력오류 있으면 vi로 들어가서 '' "" 제거
+
+
+
+[root@server1 transport]# find . -name seoul.csv -exec perl -p -i -e 's/"//g' {} \;
+[root@server1 transport]# more seoul.csv  해서 확인하면 "" 모두 삭제되어있음
+헤더정보도 삭제
+sed -e '1d' seoul.csv>seoul_new.csv
+[root@server1 ~]# mv seoul_new.csv seoul.csv
+
+
+
+3,000>String이라 연산안됨
+3000으로 바꿔서 출력해야함
+
+
+
+
+
+펴
+5.java app에서 데이터 분석
+[root@server1 ~]# hive --service hiveserver2
+
+
+
+-------------
+CREATE TABLE seoul(
+local String,
+stop String,
+ride INT,
+off INT,
+sum INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+
+
+
+
+
+
+load data local inpath '/root/transport/seoul.csv'
+overwrite into table
+seoul;
+
+
+select *from seoul limit 5;
+------------
+
+
+
+
+20180320
+
+2006.csv 수정! 후 다시 로드하기
+
+[root@server1 airline]# vi 2006.csv
+[root@server1 airline]# vi 2006.csv
+[root@server1 airline]# 
+[root@server1 airline]# hive
+
+hive> load data local inpath '/root/airline/2006.csv'
+    > overwrite into table                           
+    > airline_delay
+    > PARTITION (delayYear='2006');
+Loading data to table default.airline_delay partition (delayyear=2006)
+Partition default.airline_delay{delayyear=2006} stats: [numFiles=1, numRows=0, totalSize=672067796, rawDataSize=0]
+OK
+Time taken: 10.021 seconds
+hive> select Year,Month,AVG(ArrDelay)
+from airline_delay
+where delayYear='2006'  
+-->파티션은 자기맘대로 정하는것 delayYear라는 디렉토리에 들어가는것! 
+p.572 table 생성시 partition 정의
+where의 조건에 파티션명을 적는것, not colum 명ㅔ.535
+string 이면 ''적어야하는데 int라 괜찮,,
+
+and Month in (1,2,3)
+group by Year,Month
+order by Year,Month
+
+
+
+hive> select Year,Month,count(*)
+from airline_delay
+where delayYear='2006'
+and Month in (1,2,3,4)
+and ArrDelay>0
+group by Year,Month
+order by Year,Month; 
+
+
+
+-----------------------------------
+eclipse
+
+json(javascript object notation)
+
+[{"id":"id01","age":10},
+{"id":"id01","age":10},
+{"id":"id01","age":10},
+{"id":"id01","age":10},
+]
+
+
+
+배열안에 배열
+[[],
+
+]
+
+
+
+이클립스 하이브 프로젝트 프로펄티에가서,
+
+자바 빌드패스 라이브러리스에, hive lib와 json lib 설치한다. 
+이 폴더는삭제하면 절대안됨
+
+mv 에 있는 chart1.jsp와
+maincontroller
+
+hivetest가지고 함
+
+maincotrll가서 수정하고
+웹에서 실행하면, 콘솔창에 뜸
+오류와 수행된 지점까지
+
+
+hive_lib에 있는 jar파일 + json-simple 복사붙여넣기
+
+maven lib안에는 spring 이 세팅되어있음
+이제 hive도 쓸수있고 json도 쓸수있음
+
+서버죽이고, jsonarray해보면 이제 자동으로 쓸수있게됨
+
+웹에서 클릭하면 ok사인뜨면서 콘솔창에 찍히고, vmware에서도 hive 돌아감.
+웹창에는 그래프나옴
+
+------------------------------------
+
+1.chart3: hive data 분석 차트
+2.chart4:oracle에 데이터를 입력해서 데이터분석
+1)데이터를 검색(csv)
+2)oracle에 입력
+-table생성
+-oracle developer
+
+spring bizdao mybatis
+...
+3)spring component(VO 생성)
+ com.config에서 mybatis.xml 체크(sql)
+mapper에 가서 select 문 제대로 세팅!
+
+user폴더안에 
+비즈와 dao---상속받은거,,,,개발안할거면 blank처리..리스트겟만 바꾸고, usermapper만 살리면오케
+biz,dao
+mapper
+
+com.mapper가보니 별거없음! 이 매퍼이름은 매퍼 xml의 것들과 연결됨!selectall...
+
+
+controller 붙여야함. 새로 생성..controller만듦
+
+
+
+select date, station, dong, t_h 
+from calltable t(select )
+
+
+
+
+
+1.빅데이터 서버를 이용하여 시스템구축
+2.빅데이터 시스템구축
+-hadoop
+-hive
+
+3.수행평가작성
+작성후 제출
+디렉토리를 이름으로 만들어서 복사
+
+
+
+
+cp /
+-------------------
+
+
+2016 03 26
+slave1 에서
+
+
+
+[root@slave1 ~]# rm -rf .ssh
+[root@slave1 ~]# rm -rf /usr/local/hadoop-1.2.1/
+[root@slave1 ~]# rm -rf /usr/local/jdk-9.0.4/
+[root@slave1 ~]# rm -rf /usr/bin/java
+[root@slave1 ~]# 
+
+설치
+jdk1.8설치: /usr/local/jdk1.8
+usr/bin에 java link
+
+ln -s /usr/local/jdk1.8.0_161/bin/java java
+
+4.하둡으로 가서 네임하고 데이터 지우고 conf가서
+hadoop-env.sh
+가서 버전낮춤
+
+로컬에서 하이브폴더삭제 
+다운로드가서 카피 아파치하이브 
+
+
+[root@server1 ~]# cd 다운로드
+[root@server1 다운로드]# cp -r apache-hive-1.0.1-bin /usr/local/hive-1.0.1
+[root@server1 다운로드]# vi /etc/profile (확인)
+[root@server1 다운로드]# 
+
+하둡포멧하고 hadoop namenode -format
+
+하둡실행 start-all.sh
+jps
+
+
+
+
+하둡설치: /usr/local/hadoop-2.9.0
+하이브설치: /usr/local/hive
+4.ssh설치
+
+루트에다가, 
+
+ssh-keygen -t dsa -P '' -f /root/.ssh/id_dsa
+
+
+vi etc/profile
+ 
+     51 fi
+     52 JAVA_HOME=/usr/local/jdk1.8
+     53 HADOOP_HOME=/usr/local/hadoop-2.9.0
+     54 HIVE_HOME=//usr/local/hive
+     55 CLASSPATH=/usr/local/jdk1.8/lib
+     56 export JAVA_HOME HADOOP_HOME CLASSPATH HIVE_HOME
+     57 PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$JAVA_HOME/bin:$HIVE_HOME/bin:$P        ATH
+     58 
+     59 export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL
+
+
+ssh-copy-id -i /root/.ssh/id_dsa.pub root@slave1
+
+cd .ssh하면 authorized key 생성됨!
+
+
+
+http://hadoop.apache.org/releases.html 여기에 하둡에 관한 모든 다운로드있음!
+release click
+all previous
+
+https://archive.apache.org/dist/hadoop/common/
+
+p.416
+환경설정!
+
+[root@slave1 ~]# cd /usr/local/hadoop-2.9.0/etc/hadoop
+[root@slave1 hadoop]# 
+하둡밑에 하둡있음
+[root@slave1 hadoop]# vi hadoop-env.sh
+
+
+ 17 # Set Hadoop-specific environment variables here.
+     18 
+     19 # The only required environment variable is JAVA_HOME.  All others are
+     20 # optional.  When running a distributed configuration it is best to
+     21 # set JAVA_HOME in this file, so that it is correctly defined on
+     22 # remote nodes.
+     23 export HADOOP_HOME=/usr/local/hadoop-2.9.0
+     24 export HADOOP_PID_DIR=/usr/local/hadoop-2.9.0/pids
+     25 export HADOOP_MAPRED_HOME=$HADOOP_HOME
+     26 export HADOOP_COMMON_HOME=$HADOOP_HOME
+     27 export HADOOP_HDFS_HOME=$HADOOP_HOME
+     28 export YARN_HOME=$HADOOP_HOME
+     29 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+     30 export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+     31 # The java implementation to use.
+     32 export JAVA_HOME=/usr/local/jdk1.8
+
+
+
+
+[root@slave1 hadoop]# vi masters
+[root@slave1 hadoop]# vi slaves
+
+
+둘다 slave1 쓰고 저장
+-완전분산모드에서는 다른 것을 썼지만, 
+가상분산모드에서는 같은 slave1에서 보조네임ㅁ노드와 데이터노드를
+적는다.
+[root@slave1 hadoop]# vi core-site.xml 
+
+17 <!-- Put site-specific property overrides in this file. -->
+     18 
+     19 <configuration>
+     20 <property>
+     21 <name>fs.defaultFS</name>
+     22 <value>hdfs://slave1:9000</value>
+     23 </property>
+     24 
+     25 <property>
+     26 <name>hadoop.tmp.dir</name>
+     27 <value>/usr/local/hadoop-2.9.0/tmp</value>
+     28 </property>
+     29 
+     30 </configuration>
+
+p.419
+
+
+[root@slave1 hadoop]# vi hdfs-site.xml 
+
+--------------------
+<property>
+<name></name>
+<value></value>
+</property>
+---------------------
+<configuration>
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+
+<property>
+<name>dfs.namenode.name.dir</name>
+<value>/usr/local/hadoop-2.9.0/dfs/namenode</value>
+</property>
+
+<property>
+<name>dfs.namenode.checkpoint.dir</name>
+<value>/usr/local/hadoop-2.9.0/dfs/namesecondary</value>
+</property>
+
+<property>
+<name>dfs.datanode.data.dir</name>
+<value>/usr/local/hadoop-2.9.0/dfs/datanode</value>
+</property>
+
+<property>
+<name>dfs.webhdfs.enabled</name>
+<value>true</value>
+</property>
+
+<property>
+<name>dfs.http.address</name>
+<value>slave1:50070</value>
+</property>
+
+<property>
+<name>dfs.secondary.http.address</name>
+<value>slave1:50090</value>
+</property>
+
+</configuration>
+
+
+[root@slave1 hadoop]# vi mapred-site.xml.template 
+[root@slave1 hadoop]# cp mapred-site.xml.template mapred-site.xml
+[root@slave1 hadoop]# vi mapred-site.xml
+<configuration>
+<property>
+<name>mapreduce.framework.name</name>
+<value>yarn</value>
+</property>
+</configuration>
+
+
+
+
+yarn-env.sh p,420
+
+22 # some Java parameters
+     23 # export JAVA_HOME=/usr/local/jdk1.8
+     24 if [ "$JAVA_HOME" != "" ]; then
+     25   #echo "run java in $JAVA_HOME"
+     26   JAVA_HOME=$JAVA_HOME
+
+p.421페이지에 적힌 것 찾아서 적어줄것!
+
+[root@slave1 hadoop]# vi yarn-site.xml 
+
+
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
+
+<property>
+<name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
+<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
+
+<property>
+<name>yarn.nodemanager.local-dirs</name>
+<value>/usr/local/hadoop-2.9.0/dfs/yarn/nm-local-dir</value>
+</property>
+
+<property>
+<name>yarn.resourcemanager.fs.state-store.uri</name>
+<value>/usr/local/hadoop-2.9.0/dfs/yarn/system/rmstore</value>
+</property>
+
+<property>
+<name>yarn.resourcemanager.hostname</name>
+<value>slave1</value>
+</property>
+
+<property>
+<name>yarn.web-proxy.address</name>
+<value>0.0.0.0:8089</value>
+</property>
+
+
+
+[root@slave1 hadoop]# hdfs namenode -format
+
+start-all.sh
+p.424
+
+
+
+rm -rf dfs
+rm -rf tmp
+
+
+
+죽이고,
+
+하고 포멧후 다시 스타트얼
+
+slave1:50070
+p.426
+
+
+p.427
+
+
+
+
+
+[root@slave1 hadoop-2.9.0]# hdfs dfs -mkdir /user
+[root@slave1 hadoop-2.9.0]# hdfs dfs -mkdir /user/hadoop
+
+[root@slave1 hadoop-2.9.0]# hdfs dfs -put /usr/local/hadoop-2.9.0/README.txt /user/hadoop
+
+
+
+p.568-569
+
+
+[root@slave1 local]# cd hive/
+[root@slave1 hive]# cd conf/
+[root@slave1 conf]# ls
+beeline-log4j2.properties.template    ivysettings.xml
+hive-default.xml.template             llap-cli-log4j2.properties.template
+hive-env.sh.template                  llap-daemon-log4j2.properties.template
+hive-exec-log4j2.properties.template  parquet-logging.properties
+hive-log4j2.properties.template
+[root@slave1 conf]# cd ..
+[root@slave1 hive]# hdfs dfs -mkdir /usr/local/hive/warehouse
+
+
+
+
+[root@slave1 ~]# cd /usr
+[root@slave1 usr]# ls
+bin  etc  games  include  lib  lib64  libexec  local  sbin  share  src  tmp
+[root@slave1 usr]# cd local
+[root@slave1 local]# cd hive
+[root@slave1 hive]# cd conf
+[root@slave1 conf]# vi hive-site.xml
+[root@slave1 conf]# ls
+beeline-log4j2.properties.template    ivysettings.xml
+hive-default.xml.template             llap-cli-log4j2.properties.template
+hive-env.sh.template                  llap-daemon-log4j2.properties.template
+hive-exec-log4j2.properties.template  parquet-logging.properties
+hive-log4j2.properties.template
+[root@slave1 conf]# vi hive-site.xml
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+                <name>hive.metastore.warehouse.dir</name>
+                <value>/user/hive/warehouse</value>
+        </property>
+<property>
+<name>javax.jdo.option.ConnectionURL</name>
+<value>jdbc:derby:;databaseName=
+/usr/local/hive/meta_db;create=true</value>
+<description></description>
+</property>
+</configuration>
+~                  
+~    
+
+                
+ [root@slave1 ~]# hdfs dfs -mkdir /user/hive
+[root@slave1 ~]# hdfs dfs -mkdir /user/hive/warehouse
+[root@slave1 ~]# 
+
+
+[root@slave1 ~]# cd /usr/local
+[root@slave1 local]# cd hadoop-2.9.0/
+[root@slave1 hadoop-2.9.0]# ls
+LICENSE.txt  README.txt  dfs  include  libexec  pids  share
+NOTICE.txt   bin         etc  lib      logs     sbin
+[root@slave1 hadoop-2.9.0]# cd etc/
+[root@slave1 etc]# ls
+hadoop
+[root@slave1 etc]# cd ..
+[root@slave1 hadoop-2.9.0]# cd user
+bash: cd: user: 그런 파일이나 디렉터리가 없습니다
+[root@slave1 hadoop-2.9.0]# cd ~
+[root@slave1 ~]# cd user
+bash: cd: user: 그런 파일이나 디렉터리가 없습니다
+[root@slave1 ~]# hdfs dfs -mkdir /user/hive/warehouse
+mkdir: `/user/hive/warehouse': No such file or directory
+[root@slave1 ~]# hdfs dfs -mkdir /user/hive
+[root@slave1 ~]# hdfs dfs -mkdir /user/hive/warehouse
+[root@slave1 ~]# hdfs dfs -chmod g+w /user/hive/warehouse
+[root@slave1 ~]# hdfs dfs -mkdir /tmp
+[root@slave1 ~]# hdfs dfs -chmod g+w /tmp
+[root@slave1 ~]# hdfs dfs -chmod 777 /tmp/hive
+chmod: `/tmp/hive': No such file or directory
+[root@slave1 ~]# cd /usr/local
+[root@slave1 local]# cd hive
+[root@slave1 hive]# cd conf
+[root@slave1 conf]# vi hive-site.xml 
+[root@slave1 conf]# schematool -initSchema -dbType derby
+schematool -initSchema -dbType mysql
+hive
+>CREATE TABLE airline_delay(
+Year INT,
+MONTH INT,
+DayofMonth INT,
+DayofWeek INT,
+DepTime INT,
+CRSDepTime INT,
+ArrTime INT,
+CRSArrTime INT,
+UniqueCarrier STRING,
+FlightNum INT,
+TailNum STRING,
+ActualElapsedTime INT,
+CRSElapsedTime INT,
+AirTime INT,
+ArrDelay INT,
+DepDelay INT,
+Origin STRING,
+Dest STRING,
+Distance INT,
+TaxiIn INT,
+TaxiOut INT,
+Cancelled INT,
+CancellationCode STRING
+COMMENT 'A = carrier, B = weather, C = NAS, D = security',
+Diverted INT COMMENT '1 = yes, 0 = no',
+CarrierDelay STRING,
+WeatherDelay STRING,
+NASDelay STRING,
+SecurityDelay STRING,
+LateAircraftDelay STRING)
+COMMENT 'TEST DATA'
+PARTITIONED BY (delayYear INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+
+
+
+load data local inpath '/root/airline/2006.csv'
+overwrite into table                           
+airline_delay
+PARTITION (delayYear='2006');
+
+load data local inpath '/root/airline/2007.csv'
+overwrite into table                           
+airline_delay
+PARTITION (delayYear='2007');
+
+
+load data local inpath '/root/airline/2008.csv'
+overwrite into table                           
+airline_delay
+PARTITION (delayYear='2008');
+
+
+
+1.mysql설치
+2.hive-site.xml
+수정
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+? ? <property>
+? ? ? ? <name>hive.metastore.local</name>
+? ? ? ? <value>true</value>
+? ? ? ? <description>controls whether to connect to remove metastore server or?open a new 
+metastore server in Hive Client JVM</description>
+ </property>
+ <property>
+ <name>javax.jdo.option.ConnectionURL</name>
+ <value>jdbc:mariadb://localhost:3306/hive_db?createDatabaseIfNotExist=true</value>
+ <description>JDBC connect string for a JDBC metastore</description>
+ </property>
+ <property>
+ <name>javax.jdo.option.ConnectionDriverName</name>
+ <value>org.mariadb.jdbc.Driver</value>
+ <description>Driver class name for a JDBC metastore</description>
+ </property>
+ <property>
+ <name>javax.jdo.option.ConnectionUserName</name>
+ <value>hive</value>
+ <description>username to use against metastore database</description>
+ </property>
+ <property>
+ <name>javax.jdo.option.ConnectionPassword</name>
+ <value>111111</value>
+ <description>password to use against metastore database</description>
+</property>
+</configuration>
+
+
+
+
+3.
+
+
+yum -y remove mariadb-libs
+yum -y localinstall Maria*
+systemctl restart mysql
+systemctl status mysql
+chkconfig mysql on
+
+마리아디비에 관련된것.... 
+
+
+
+
+
+
+
+
+
+
