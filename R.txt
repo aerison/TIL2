@@ -1,0 +1,157 @@
+R
+
+https://thebook.io/006723/
+
+https://cran.r-project.org/mirrors.html
+
+https://cran.r-project.org/
+
+http://healthstat.snu.ac.kr/CRAN/
+
+https://www.rstudio.com/products/rstudio/download/#download
+
+http://www.easyspub.co.kr/
+
+
+R-3.4.4-win
+R-studio-1.1.442
+
+설치
+
+
+
+
+20180327
+-R
+1.Scala (1차원)
+
+2.Vector(1차원 배열):한가지타입
+
+
+vv2 <- v1[c('ko','ch')]
+
+vv2 <- v1[c(1,4)]
+
+vv2 <- v1[c(-2,'-3)]
+
+vv2 <- v1[-2:-3]
+
+c()는 벡터의미!
+
+3.LIST
+4.Matrix(가로세로 2차원행렬):한가지타입
+
+5.DataFrame: multi type
+
+
+w3schools.com --
+
+
+20180328
+
+-R programming
+1.condition, loop
+2.function
+
+-R data Load
+1.exel
+2.csv
+
+
+
+1.Data 수집
+-서울시 or 공공데이터
+
+2.R로 load
+
+3.Analysis
+
+
+
+
+--------------
+20183030
+1.aggregate
+2.apply
+3.sapply
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
