@@ -1,0 +1,343 @@
+/etc/profile.d
+
+history size-histsize
+
+echo $PS1
+W* W* W*
+
+TMOut
+
+모든 process 각각 PID할당
+httpd <-ps ax |grep httpd기동여부확인
+
+프로세스대ㅅ기상태 확인하는명령어
+jobs(백그라운드 프로세스)
+ls 
+ps &
+
+
+/ var/log
+
+
+
+ps tree 서 명령의인자까지~
+pstree -a
+
+
+분/시간/일/월
+
+kill -9 무조건죽여라
+
+
+닫아도 실행하게하는것 nohup
+
+프로세스상태확인 명령어
+top
+ps
+pstree
+
+유닉스계열 편집기 빌조이vi
+
+nano:리눅스에디터
+-pico editor:예전 리눅스버전에서 윈도우 메모장기능
+:
+
+
+
+
+vi 에디터의 입력모드전환
+a:커서우측한칸
+i:커서 위치
+o:커서바로아래
+
+
+
+문자열전부변환
+:1,$ s/brandon/clark
+첫줄부터 끝까지 문자열 s를 b>c로 바꿔라
+
+
+
+우분투-dpkg:apt-get   
+i옵션으로 설치가능
+etc/apt/source.list:패키지 관련정보
+
+rpm -i패키지설치
+
+
+<tar>
+cvf 묶는거
+xvf 푸는거
+tar -z:gzip
+    -d:압축품
+
+tar -j:bzip
+
+
+
+
+v처리중파일 자세히
+f파일이름지정ㅇ
+t:압축내용확인
+
+
+yum remove
+
+
+xwindow 스캐너 도구
+xsane
+
+
+프린터ㅎ웹기반제어:lpr
+IPP 631pt
+lpr q:작업목ㄹ고확인
+
+
+버클리 프린팅 시스템 LPRng
+
+
+
+프린터 큐 작업삭제:
+큐상태확인:
+
+
+-r:remove
+
+
+
+
+startx
+--xinit:booting
+
+xwindow
+창열기닫기
+윈도우매니저
+
+
+GNOME
+evince:pdf reader
+nautilus:file manage
+gedit:file edit
+
+
+클라이언트 지정.해제명령
+xhost
++-
+
+Xlib(func)
+
+
+흰녹Tx+
+녹  Tx-
+흰주 Rx+
+주   Rx-
+파 x
+흰파 x
+갈색사용안함
+
+SSL:세션계층
+HTTP:응용 7계층
+
+
+
+ip diomain
+IANA
+
+프로토콜의 구성요소
+구문/의미/순서
+
+
+
+네트워크 프로토콜
+IP:맥 ->
+UDP:비연결
+ARP:아이피>맥
+TCP:연결
+
+
+LX광케이블
+
+
+
+
+특정디렉토리를 하위디렉토리
+nfs
+
+
+safari-apple계열
+
+
+고퍼! -대량의 정보검색. 인터넷처음등장
+
+
+유즈넷-토론
+
+NIS-
+
+
+
+
+
+
+open 연결
+
+공개소프트웨어 공개개정 -anomymous
+
+전자우편프로토콜-pop3
+
+
+
+
+
+
+dns ip주소
+/etc/resolve.conf
+netstat 상태값:응답은햇지만, 아직 확인메시지는받지않음
+sync -sent
+acsync -receive
+
+
+
+telnet
+
+
+
+
+
+
+
+
+백업-고가용성
+
+-임베디드 시스템... 
+-하이퍼 브이:가상화프로그램
+
+
+모바일 운영체제 달빗:자바는 안드로이드
+
+
+
+
+
+권한 
+소유자 그룹 다른사용자
+rwx    rwx    rwx
+421	421	421
+7	7	7:directory
+6	6	6:file
+chmod 777
+
+default:umask -S
+0	2	2
+7	5	5
+rwx	r-x	r-x  ugo
+6	4	4
+rw	r--	r--
+
+
+
+-s문자표기
+
+chgrp-R하위디렉토리
+
+-c권한변경
+
+-ㅣ목록
+
+특수권한(t)
+SETUID:실행-소유자 4000
+SETGID:그룹-2000
+STICKBIT-공유폴더지정
+
+chmode 1000 A.out
+ls ---t:공유폴더임을 이야기함!
+
+user
+group
+other
+
+g+s:권한추가!
+
+
+fdisk:partition------------df사용량확인
+mkfs -t:파일시스템형태
+mount -t:연결
+
+
+fsck:무결성검사/복원/오류수정
+생성과는 상관없음!
+
+리눅스표준 shell-bash
+
+
+
+
+echo $shell:shell을 화면출력
+
+자동로그아웃변수 TMOUT
+
+prompt
+
+
+<>
+fork:부모자식간의
+exec:대체 커멘드(tree x)
+
+
+<리눅스demon>
+stadardalone(always)
+inetd---ftp,telnet(특정포트로 요청이오면 기동)
+
+ctl+c
+
+
+
+
+
+
+httpd-standardalone demon:web
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
